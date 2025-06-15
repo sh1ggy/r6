@@ -35,7 +35,7 @@ class forecast extends Command
         }
         $citiesTable = [];
         foreach ($cities as $city) {
-            $this->comment($city);
+            // $this->comment($city); rm
             $forecast = $this->forecastService->getCurrentForecast($city);
             $citiesTable[] = ['City' => $city, 'Day 1' => $forecast[0]->getDateContentString(), 'Day 2' => $forecast[1]->getDateContentString(), 'Day 3' => $forecast[2]->getDateContentString(), 'Day 4' => $forecast[3]->getDateContentString(), 'Day 5' => $forecast[4]->getDateContentString(),];
         }

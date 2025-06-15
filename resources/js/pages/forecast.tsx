@@ -11,7 +11,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { convertToCelsius } from '@/lib/utils';
 import { Head } from '@inertiajs/react';
-import { Cloud, MapPin, Thermometer } from 'lucide-react';
+import { MapPin, Thermometer } from 'lucide-react';
 import { useState } from 'react';
 
 interface Forecast {
@@ -29,7 +29,7 @@ export default function Forecast() {
     async function handleChange(e: string) {
         setErr(undefined);
         setLocation(e);
-        const result = await fetch(`https://r6.test/api/forecast/${e}`);
+        const result = await fetch(`/api/forecast/${e}`);
         if (!result.ok) {
             const errMsg = (await result.json()).message;
             setErr(errMsg ?? 'There has been an error.');
@@ -50,10 +50,7 @@ export default function Forecast() {
                 <div className="flex flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:min-h-screen lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
                     <Card className="flex w-full lg:max-w-6xl">
                         <CardHeader>
-                            <div className="align-center flex gap-4">
-                                <Cloud className="h-12" size="lg" />
-                                <h1 className="mb-4 text-5xl">R6 5 Day Weather Forecasts</h1>
-                            </div>
+                            <h1 className="mb-4 text-5xl">R6 5 Day Weather Forecasts</h1>
                         </CardHeader>
                         <CardContent>
                             <DropdownMenu>
@@ -113,9 +110,9 @@ export default function Forecast() {
                                                     forecastString = 'Yesterday';
                                                 }
                                                 return (
-                                                    <Card key={f.date.toString()} className="w-42">
+                                                    <Card key={f.date.toString()} className="w-48">
                                                         <CardHeader>
-                                                            <h1 className="mb-4 text-xl">{forecastString}</h1>
+                                                            <h1 className="mb-4 text-xl font-extrabold">{forecastString}</h1>
                                                         </CardHeader>
                                                         <CardContent className="flex flex-col gap-6 text-lg font-bold">
                                                             <div className="flex">

@@ -125,5 +125,4 @@ return [
 
     'api_key' => env('API_KEY', 'api-key'),
     'api_url' => env('API_URL', 'http://dataservice.accuweather.com'),
-
 ];
