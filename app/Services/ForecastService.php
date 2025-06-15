@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\Day;
 use Illuminate\Support\Facades\Http;
 use App\Models\Forecast;
+use Exception;
+use PhpParser\PrettyPrinter;
 
 class ForecastService
 {
@@ -18,21 +20,31 @@ class ForecastService
 
     public function getCurrentForecast(string $q)
     {
-        echo ("GETTING\n");
         $client = Http::timeout(30);
         $apiUrl = config('app.api_url');
-
-        $cityKey = $client->get(
+        $cityResponse = $client->get(
             "{$apiUrl}/locations/v1/cities/search",
             ['q' => $q, 'apikey' => config('app.api_key')],
-        )->json()[0]['Key'];
-
+        );
+        if (!$cityResponse->successful()) {
+            throw new Exception($cityResponse->json()['Message']);
+        }
+        $cityResponse = $cityResponse->json();
+        echo(json_encode($cityResponse, JSON_PRETTY_PRINT));
+        if (!array_key_exists(0, $cityResponse)) {
+            throw new Exception("No array");
+        }
+        $cityResponse = $cityResponse[0];
+        if (!array_key_exists('Key', $cityResponse)) {
+            throw new Exception("No Key");
+        }
+        $cityKey = $cityResponse['Key'];
         $dailyForecasts = $client->get(
             "{$apiUrl}/forecasts/v1/daily/5day/{$cityKey}",
             ['apikey' => config('app.api_key')],
         )->json();
         $forecast = Day::weatherFromJSON($dailyForecasts);
-        echo ($forecast);
+        // echo(json_encode($forecast, JSON_PRETTY_PRINT));
         return $forecast;
     }
 }

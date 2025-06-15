@@ -45,6 +45,6 @@ class Day extends Model
             ]);
         }
 
-        return collect($dayModels);
+        return $dayModels;
     }
 }
